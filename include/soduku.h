@@ -2,42 +2,44 @@
 #define SODUKU_H
 
 #include <vector>
-using namespace std;
+#include <iostream>
 
 class Cell {
-    static const int POSSIBLE_COUNT = 9;
-public:
-    vector<bool> candidates;
-    int value;
-    Cell(){
-        this->candidates = vector<bool>(this->POSSIBLE_COUNT, true);
-        this->value = -1;
-    }
+    static const int POSSIBLE_COUNT;
 
-    void fill(int value){
-        
-    }
+   public:
+    std::vector<bool> candidates;
+    int value;
+    bool filled;
+
+    Cell();
+
+    void fill(int value);
+
+    bool have_candidate(int value);
+
+    void remove_candidate(int num);
+
+   private:
+    void _remove_all_candidates();
+    void _remove_all_candidates_except(int value);
 };
 
-const int Cell::POSSIBLE_COUNT;
 
 
 class Soduku {
-    static const int ROW_COUNT = 9;
-    static const int COL_COUNT = 9;
-public:
-    vector<vector<Cell>> cells;
+    static const int ROW_COUNT;
+    static const int COL_COUNT;
 
-    Soduku(){
-        this->cells = vector<vector<Cell>>(this->ROW_COUNT, vector<Cell>(this->COL_COUNT, Cell()));
-    }
+   public:
+    std::vector<std::vector<Cell>> cells;
 
-    void fill(vector<vector<int>> quest) {
-        
-    }
+    Soduku();
+
+    void fill(std::vector<std::vector<int>> quest);
+
+    void print(std::ostream& out);
 };
 
-const int Soduku::ROW_COUNT;
-const int Soduku::COL_COUNT;
 
 #endif
