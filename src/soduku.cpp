@@ -1,5 +1,6 @@
 #include "soduku.h"
 #include "debug_utils/debug_utils.h"
+#include "house.h"
 
 const int Cell::POSSIBLE_COUNT = 9;
 
@@ -8,6 +9,10 @@ Cell::Cell() {
     this->value = -1;
     this->filled = false;
     this->fixed = false;
+
+    this->row_belong = nullptr;
+    this->col_belong = nullptr;
+    this->box_belong = nullptr;
 }
 
 void Cell::fix(int num) {
@@ -58,7 +63,8 @@ void Cell::_remove_all_candidates() {
 void Cell::_remove_all_candidates_except(int value) {
     ASSERT(this->have_candidate(value), "does't have this candidate.");
     for (int i = 0; i < this->POSSIBLE_COUNT; i++) {
-        if(i == value - 1) continue;
+        if (i == value - 1)
+            continue;
         this->candidates[i] = false;
     }
 }
@@ -67,8 +73,52 @@ const int Soduku::ROW_COUNT = 9;
 const int Soduku::COL_COUNT = 9;
 
 Soduku::Soduku() {
-    this->cells = std::vector<std::vector<Cell>>(
-        this->ROW_COUNT, std::vector<Cell>(this->COL_COUNT, Cell()));
+    LOG_INFO("soduku initializing...");
+    for(int i = 0; i < this->ROW_COUNT; i++) {
+        std::vector<Cell*> cell_row = std::vector<Cell*>();
+        for(int j = 0; j < this->COL_COUNT; j++) {
+            cell_row.push_back(new Cell());
+        } 
+        this->cells.push_back(cell_row);
+    }
+
+    std::vector<std::vector<Cell*>> rows = std::vector<std::vector<Cell*>>(
+        this->ROW_COUNT, std::vector<Cell*>(this->COL_COUNT, nullptr));
+    std::vector<std::vector<Cell*>> columns = std::vector<std::vector<Cell*>>(
+        this->COL_COUNT, std::vector<Cell*>(this->ROW_COUNT, nullptr));
+
+    // shape: (3, 3, 3, 3)
+    std::vector<std::vector<std::vector<std::vector<Cell*>>>> boxes =
+        std::vector<std::vector<std::vector<std::vector<Cell*>>>>(
+            3, std::vector<std::vector<std::vector<Cell*>>>(
+                   3, std::vector<std::vector<Cell*>>(
+                          3, std::vector<Cell*>(3, nullptr))));
+
+    for (int i = 0; i < this->ROW_COUNT; i++) {
+        for (int j = 0; j < this->COL_COUNT; j++) {
+            Cell* c = this->cells[i][j];
+            rows[i][j] = c;
+            columns[j][i] = c;
+            boxes[i / 3][j / 3][i % 3][j % 3] = c;
+        }
+    }
+    for (int i = 0; i < this->ROW_COUNT; i++) {
+        this->rows.push_back(new Row(i + 1, rows[i]));
+    }
+
+    for (int i = 0; i < this->COL_COUNT; i++) {
+        this->columns.push_back(new Column(i + 1, columns[i]));
+    }
+
+    for (int i = 0; i < 3; i++) {
+        std::vector<Box*> box_row;
+        for (int j = 0; j < 3; j++) {
+            box_row.push_back(new Box(i * 3 + j + 1, boxes[i][j]));
+        }
+        this->boxes.push_back(box_row);
+    }
+
+    LOG_INFO("soduku initialization finished.");
 }
 
 void Soduku::init(std::vector<std::vector<int>> quest) {
@@ -82,9 +132,34 @@ void Soduku::init(std::vector<std::vector<int>> quest) {
         for (int j = 0; j < col_count; j++) {
             if (quest[i][j] == -1)
                 continue;
-            this->cells[i][j].fix(quest[i][j]);
+            this->cells[i][j]->fix(quest[i][j]);
         }
     }
+}
+
+void Soduku::fill(int row_num, int col_num, int value) {
+    ASSERT(row_num >= 1 && row_num <= this->ROW_COUNT,
+           "Row number should be between 1 and 9.");
+    ASSERT(col_num >= 1 && col_num <= this->COL_COUNT,
+           "Col number should be between 1 and 9.");
+    this->cells[row_num - 1][col_num - 1]->fill(value);
+}
+
+void Soduku::remove_candidate(int row_num, int col_num, int value) {
+    ASSERT(row_num >= 1 && row_num <= this->ROW_COUNT,
+           "Row number should be between 1 and 9.");
+    ASSERT(col_num >= 1 && col_num <= this->COL_COUNT,
+           "Col number should be between 1 and 9.");
+    this->cells[row_num - 1][col_num - 1]->remove_candidate(value);
+}
+
+Cell* Soduku::get_cell(int row_num, int col_num){
+    ASSERT(row_num >= 1 && row_num <= this->ROW_COUNT,
+           "Row number should be between 1 and 9.");
+    ASSERT(col_num >= 1 && col_num <= this->COL_COUNT,
+           "Col number should be between 1 and 9.");
+
+    return this->cells[row_num - 1][col_num - 1];
 }
 
 void Soduku::print(std::ostream& out) {
@@ -109,10 +184,10 @@ void Soduku::print(std::ostream& out) {
                 for (int l = 0; l < 3; l++) {
                     int candidate = 1 + j * 3 + l;
                     out << " ";
-                    if (this->cells[i][k].have_candidate(candidate)) {
-                        if(this->cells[i][k].fixed) {
+                    if (this->cells[i][k]->have_candidate(candidate)) {
+                        if (this->cells[i][k]->fixed) {
                             out << "\033[31m";
-                        } else if (this->cells[i][k].filled) {
+                        } else if (this->cells[i][k]->filled) {
                             out << "\033[36m";
                         }
                         out << candidate << "\033[0m";

@@ -7,6 +7,7 @@
 
 #include "debug_utils/debug_utils.h"
 #include "soduku.h"
+#include "solve/peerpruner.h"
 
 
 
@@ -42,7 +43,10 @@ int main() {
         {-1, -1, 8, -1, 9, -1, 6, 7, -1}
     };
     soduku.init(quest);
-    
+    soduku.print(std::cout);
+
+    PeerPruner p(&soduku);
+    p.prune();
     soduku.print(std::cout);
     return 0;
 }

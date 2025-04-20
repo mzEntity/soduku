@@ -1,8 +1,9 @@
-#ifndef SODUKU_H
-#define SODUKU_H
+#pragma once
 
 #include <vector>
 #include <iostream>
+
+#include "house.h"
 
 class Cell {
     static const int POSSIBLE_COUNT;
@@ -12,6 +13,9 @@ class Cell {
     int value;
     bool filled;
     bool fixed;
+    Row* row_belong;
+    Column* col_belong;
+    Box* box_belong;
 
     Cell();
 
@@ -19,7 +23,6 @@ class Cell {
     void fill(int value);
 
     bool have_candidate(int value);
-
     void remove_candidate(int num);
 
    private:
@@ -34,14 +37,17 @@ class Soduku {
     static const int COL_COUNT;
 
    public:
-    std::vector<std::vector<Cell>> cells;
+    std::vector<std::vector<Cell*>> cells;
+    std::vector<Row*> rows;
+    std::vector<Column*> columns;
+    std::vector<std::vector<Box*>> boxes;
 
     Soduku();
 
     void init(std::vector<std::vector<int>> quest);
-
+    void fill(int row_num, int col_num, int value);
+    void remove_candidate(int row_num, int col_num, int value);
+    Cell* get_cell(int row_num, int col_num);
+    
     void print(std::ostream& out);
 };
-
-
-#endif
