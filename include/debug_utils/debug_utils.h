@@ -3,7 +3,7 @@
 #include <string_view>
 #include <source_location>
 
-#include "debug_config.h"
+#include "debug_utils/debug_config.h"
 
 namespace debug {
 

@@ -18,12 +18,12 @@ namespace debug {
         if (USE_COLOR) {
             std::cerr << color_code << "[" << level_str << "] " << "\033[0m"
                   << location.file_name() << ":" << location.line() << " "
-                  << location.function_name() << "(): "
+                  << location.function_name() << ": "
                   << message << std::endl;
         } else {
             std::cerr << "[" << level_str << "] "
                   << location.file_name() << ":" << location.line() << " "
-                  << location.function_name() << "(): "
+                  << location.function_name() << ": "
                   << message << std::endl;
         }
         

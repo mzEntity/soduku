@@ -7,6 +7,18 @@ Cell::Cell() {
     this->candidates = std::vector<bool>(this->POSSIBLE_COUNT, true);
     this->value = -1;
     this->filled = false;
+    this->fixed = false;
+}
+
+void Cell::fix(int num) {
+    ASSERT(num >= 1 && num <= this->POSSIBLE_COUNT,
+           "Number should be between 1 and 9.");
+    ASSERT(!this->filled, "the cell is already filled.");
+    this->value = num;
+    this->filled = true;
+    this->fixed = true;
+
+    this->_remove_all_candidates_except(this->value);
 }
 
 void Cell::fill(int num) {
@@ -59,7 +71,7 @@ Soduku::Soduku() {
         this->ROW_COUNT, std::vector<Cell>(this->COL_COUNT, Cell()));
 }
 
-void Soduku::fill(std::vector<std::vector<int>> quest) {
+void Soduku::init(std::vector<std::vector<int>> quest) {
     int row_count = quest.size();
     ASSERT(row_count == this->ROW_COUNT, "shape of the soduku doesn't match.");
 
@@ -70,7 +82,7 @@ void Soduku::fill(std::vector<std::vector<int>> quest) {
         for (int j = 0; j < col_count; j++) {
             if (quest[i][j] == -1)
                 continue;
-            this->cells[i][j].fill(quest[i][j]);
+            this->cells[i][j].fix(quest[i][j]);
         }
     }
 }
@@ -98,7 +110,12 @@ void Soduku::print(std::ostream& out) {
                     int candidate = 1 + j * 3 + l;
                     out << " ";
                     if (this->cells[i][k].have_candidate(candidate)) {
-                        out << candidate;
+                        if(this->cells[i][k].fixed) {
+                            out << "\033[31m";
+                        } else if (this->cells[i][k].filled) {
+                            out << "\033[36m";
+                        }
+                        out << candidate << "\033[0m";
                     } else {
                         out << " ";
                     }

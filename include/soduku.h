@@ -11,9 +11,11 @@ class Cell {
     std::vector<bool> candidates;
     int value;
     bool filled;
+    bool fixed;
 
     Cell();
 
+    void fix(int value);
     void fill(int value);
 
     bool have_candidate(int value);
@@ -36,7 +38,7 @@ class Soduku {
 
     Soduku();
 
-    void fill(std::vector<std::vector<int>> quest);
+    void init(std::vector<std::vector<int>> quest);
 
     void print(std::ostream& out);
 };
