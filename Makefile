@@ -3,7 +3,8 @@ CXX = g++
 CXXFLAGS = -std=c++20 -Wall -Wextra -g -Iinclude
 
 # 所有源文件（包括主函数和 src 下的所有 .cpp 文件）
-SRCS = main.cpp $(wildcard src/**/*.cpp) $(wildcard src/*.cpp)
+# SRCS = main.cpp $(wildcard src/*/*/*.cpp) $(wildcard src/*/*.cpp) $(wildcard src/*.cpp)
+SRCS = main.cpp $(shell find src -name "*.cpp")
 
 # 源文件对应的目标文件（把 .cpp 改为 .o）
 OBJS = $(SRCS:.cpp=.o)

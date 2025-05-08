@@ -23,7 +23,10 @@ class Cell {
     void fill(int value);
 
     bool have_candidate(int value);
+    int candidate_count();
     void remove_candidate(int num);
+
+    std::vector<int> get_all_candidates();
 
    private:
     void _remove_all_candidates();

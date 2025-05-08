@@ -44,6 +44,14 @@ bool Cell::have_candidate(int num) {
     return this->candidates[index];
 }
 
+int Cell::candidate_count() {
+    int count = 0;
+    for(int i = 1; i <= 9; i++) {
+        if(this->have_candidate(i)) count += 1;
+    }
+    return count;
+}
+
 void Cell::remove_candidate(int num) {
     ASSERT(!this->filled, "the cell is already filled.");
     ASSERT(num >= 1 && num <= this->POSSIBLE_COUNT,
@@ -52,6 +60,14 @@ void Cell::remove_candidate(int num) {
     ASSERT(this->candidates[index], "remove a non-existent candidate.");
 
     this->candidates[index] = false;
+}
+
+std::vector<int> Cell::get_all_candidates(){
+    std::vector<int> result;
+    for(int i = 1; i <= 9; i++) {
+        if(this->have_candidate(i)) result.push_back(i);
+    }
+    return result;
 }
 
 void Cell::_remove_all_candidates() {

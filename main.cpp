@@ -8,6 +8,8 @@
 #include "debug_utils/debug_utils.h"
 #include "soduku.h"
 #include "solve/peerpruner.h"
+#include "solve/singles/nakedsingle.h"
+#include "solve/singles/hiddensingle.h"
 
 
 
@@ -22,6 +24,7 @@ std::string getCurrentTimeString() {
     
     return oss.str();
 }
+
 
 int main() {
     using namespace std;
@@ -43,10 +46,37 @@ int main() {
         {-1, -1, 8, -1, 9, -1, 6, 7, -1}
     };
     soduku.init(quest);
+
+    LOG_INFO("The initial state of Sudoku...");
     soduku.print(std::cout);
 
-    PeerPruner p(&soduku);
-    p.prune();
+    PeerPruner peerPruner(&soduku);
+    NakedSingleSolver nakedSingleSolver(&soduku);
+    HiddenSingleSolver hiddenSingleSolver(&soduku);
+
+
+    peerPruner.prune();
+    LOG_INFO("After the initial pruning...");
+    soduku.print(std::cout);
+
+    while(true) {
+        peerPruner.prune();  
+
+        Cell* c = nullptr;
+        c = nakedSingleSolver.solve();
+        if(c != nullptr) {
+            continue;
+        }
+
+        c = hiddenSingleSolver.solve();
+        if(c != nullptr) {
+            continue;
+        }
+
+        break;
+    }
+
+    LOG_INFO("The final result...(really?)");
     soduku.print(std::cout);
     return 0;
 }

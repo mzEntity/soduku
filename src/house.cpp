@@ -60,7 +60,7 @@ void Column::remove_candidate_from(Cell* c) {
 }
 
 Box::Box(int box_num, std::vector<std::vector<Cell*>> cells) {
-    ASSERT(box_num >= 1 && box_num <= 9, "row num should be between 1 and 9.");
+    ASSERT(box_num >= 1 && box_num <= 9, "box num should be between 1 and 9.");
     ASSERT(cells.size() == this->ROW_COUNT, "In one box, there is 3 rows.");
     ASSERT(cells[0].size() == this->COL_COUNT,
            "In one box, there is 3 columns.");
