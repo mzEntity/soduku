@@ -1,5 +1,7 @@
 #include "solve/singles/hiddensingle.h"
 #include "debug_utils/debug_utils.h"
+#include "solve/solutionlog.h"
+
 #include "soduku.h"
 
 HiddenSingleSolver::HiddenSingleSolver(Soduku* target) {
@@ -43,6 +45,7 @@ Cell* HiddenSingleSolver::_solve_row() {
                     continue;
                 }
                 this->_work(target_c, i + 1);
+                SOLUTION_INFO("HiddenSingle: " + target_c->get_position() + "=" + std::to_string(i+1));
                 return target_c;
             }
         }
@@ -72,6 +75,7 @@ Cell* HiddenSingleSolver::_solve_column() {
                     continue;
                 }
                 this->_work(target_c, i + 1);
+                SOLUTION_INFO("HiddenSingle: " + target_c->get_position() + "=" + std::to_string(i+1));
                 return target_c;
             }
         }
@@ -105,6 +109,7 @@ Cell* HiddenSingleSolver::_solve_box() {
                         continue;
                     }
                     this->_work(target_c, i + 1);
+                    SOLUTION_INFO("HiddenSingle: " + target_c->get_position() + "=" + std::to_string(i+1));
                     return target_c;
                 }
             }

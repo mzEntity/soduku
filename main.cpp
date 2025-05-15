@@ -4,14 +4,24 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
+#include <limits> // std::numeric_limits
 
 #include "debug_utils/debug_utils.h"
 #include "soduku.h"
 #include "solve/peerpruner.h"
 #include "solve/singles/nakedsingle.h"
 #include "solve/singles/hiddensingle.h"
+#include "solve/intersections/lockedcandidates.h"
 
 
+void pressAnyKeyToContinue() {
+    std::cout << "按任意键继续..." << std::endl;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
+void clearConsole() {
+    std::cout << "\033[2J\033[H";
+}
 
 std::string getCurrentTimeString() {
     using namespace std;
@@ -47,22 +57,26 @@ int main() {
     };
     soduku.init(quest);
 
-    LOG_INFO("The initial state of Sudoku...");
-    soduku.print(std::cout);
+    // LOG_INFO("The initial state of Sudoku...");
+    // soduku.print(std::cout);
 
     PeerPruner peerPruner(&soduku);
     NakedSingleSolver nakedSingleSolver(&soduku);
     HiddenSingleSolver hiddenSingleSolver(&soduku);
 
+    LockedCandidatesPointing lockedCandidatesPointing(&soduku);
 
-    peerPruner.prune();
-    LOG_INFO("After the initial pruning...");
-    soduku.print(std::cout);
-
+    clearConsole();
+    
     while(true) {
         peerPruner.prune();  
+        soduku.print(std::cout);
+        pressAnyKeyToContinue();
+        clearConsole();
 
         Cell* c = nullptr;
+        bool change = false;
+
         c = nakedSingleSolver.solve();
         if(c != nullptr) {
             continue;
@@ -70,6 +84,11 @@ int main() {
 
         c = hiddenSingleSolver.solve();
         if(c != nullptr) {
+            continue;
+        }
+
+        change = lockedCandidatesPointing.solve();
+        if(change) {
             continue;
         }
 

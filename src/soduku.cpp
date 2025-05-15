@@ -70,6 +70,10 @@ std::vector<int> Cell::get_all_candidates(){
     return result;
 }
 
+std::string Cell::get_position() {
+    return "r" + std::to_string(this->row_belong->num) + "c" + std::to_string(this->col_belong->num);
+}
+
 void Cell::_remove_all_candidates() {
     for (int i = 0; i < this->POSSIBLE_COUNT; i++) {
         this->candidates[i] = false;

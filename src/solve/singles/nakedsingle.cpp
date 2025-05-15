@@ -1,6 +1,7 @@
 #include "solve/singles/nakedsingle.h"
 #include "soduku.h"
 #include "debug_utils/debug_utils.h"
+#include "solve/solutionlog.h"
 
 NakedSingleSolver::NakedSingleSolver(Soduku* target){
     this->target = target;
@@ -13,7 +14,9 @@ Cell* NakedSingleSolver::solve(){
             if(c->filled) continue;
             int candidate_count = c->candidate_count();
             if(candidate_count == 1) {
-                this->_work(c);
+                int value = c->get_all_candidates()[0];
+                this->_work(c, value);
+                SOLUTION_INFO("NakedSingle: " + c->get_position() + "=" + std::to_string(value));
                 return c;
             }
         }
@@ -22,9 +25,6 @@ Cell* NakedSingleSolver::solve(){
     return nullptr;
 }
 
-void NakedSingleSolver::_work(Cell* c){
-    ASSERT(!c->filled, "cell has already been filled.");
-    ASSERT(c->candidate_count() == 1, "nakedsingle condition unmet.");
-    int value = c->get_all_candidates()[0];
+void NakedSingleSolver::_work(Cell* c, int value){
     c->fill(value);
 }

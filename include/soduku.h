@@ -28,6 +28,8 @@ class Cell {
 
     std::vector<int> get_all_candidates();
 
+    std::string get_position();
+
    private:
     void _remove_all_candidates();
     void _remove_all_candidates_except(int value);

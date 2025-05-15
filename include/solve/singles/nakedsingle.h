@@ -11,5 +11,5 @@ class NakedSingleSolver {
     Cell* solve();
 
     private:
-    void _work(Cell* c);
+    void _work(Cell* c, int value);
 };
