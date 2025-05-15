@@ -95,3 +95,108 @@ bool LockedCandidatesPointing::_solve_box(Box* b) {
     }
     return false;
 }
+
+
+LockedCandidatesClaiming::LockedCandidatesClaiming(Soduku* target) {
+    this->target = target;
+}
+
+bool LockedCandidatesClaiming::solve() {
+    for(const auto& row: this->target->rows) {
+        bool change = this->_solve_row(row);
+        if(change) return true;
+    }
+    
+    for(const auto& column: this->target->columns) {
+        bool change = this->_solve_column(column);
+        if(change) return true;
+    }
+    return false;
+}
+
+bool LockedCandidatesClaiming::_solve_row(Row* row) {
+    using namespace std;
+    vector<vector<int>> candidate_col(9, vector<int>());
+    for(int i = 0; i < 9; i++) {
+        Cell* c = row->cells[i];
+        if(c->filled) continue;
+        vector<int> candidates = c->get_all_candidates();
+        for(const auto& candidate: candidates) {
+            candidate_col[candidate-1].push_back(i);
+        }
+    }
+
+    for(int i = 0; i < 9; i++) {
+        int value = i + 1;
+        vector<int> cur_candidate_cols = candidate_col[i];
+        if(cur_candidate_cols.size()==0) continue;
+        int last_box = cur_candidate_cols[0] / 3;
+        bool failed = false;
+        for(const auto& col: cur_candidate_cols) {
+            if(col / 3 != last_box) {
+                failed = true;
+                break;
+            }
+        }
+        if(failed) continue;
+        Box* cur_box = this->target->boxes[(row->num - 1) / 3][last_box];
+        bool change = false;
+        for(const auto& cell_row: cur_box->cells) {
+            for(const auto& cell: cell_row) {
+                if(cell->row_belong == row) continue;
+                if(!cell->have_candidate(value)) continue;
+                cell->remove_candidate(value);
+                change = true;
+            }
+        }
+        if(change) {
+            SOLUTION_INFO("LockedCandidates Type 2(Claiming): r" + std::to_string(row->num) + "=> " + std::to_string(value));
+            return true;
+        }
+    }
+    return false;
+}
+
+
+bool LockedCandidatesClaiming::_solve_column(Column* column) {
+    using namespace std;
+    vector<vector<int>> candidate_row(9, vector<int>());
+    for(int i = 0; i < 9; i++) {
+        Cell* c = column->cells[i];
+        if(c->filled) continue;
+        vector<int> candidates = c->get_all_candidates();
+        for(const auto& candidate: candidates) {
+            candidate_row[candidate-1].push_back(i);
+        }
+    }
+
+    for(int i = 0; i < 9; i++) {
+        int value = i + 1;
+        vector<int> cur_candidate_rows = candidate_row[i];
+        if(cur_candidate_rows.size()==0) continue;
+        int last_box = cur_candidate_rows[0] / 3;
+        bool failed = false;
+        for(const auto& row: cur_candidate_rows) {
+            if(row / 3 != last_box) {
+                failed = true;
+                break;
+            }
+        }
+        if(failed) continue;
+        Box* cur_box = this->target->boxes[last_box][(column->num - 1) / 3];
+        bool change = false;
+        for(const auto& cell_row: cur_box->cells) {
+            for(const auto& cell: cell_row) {
+                if(cell->col_belong == column) continue;
+                if(!cell->have_candidate(value)) continue;
+                cell->remove_candidate(value);
+                change = true;
+            }
+        }
+        if(change) {
+            SOLUTION_INFO("LockedCandidates Type 2(Claiming): c" + std::to_string(column->num) + "=> " + std::to_string(value));
+            return true;
+        }
+    }
+    return false;
+}

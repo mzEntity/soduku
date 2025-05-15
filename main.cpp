@@ -65,9 +65,10 @@ int main() {
     HiddenSingleSolver hiddenSingleSolver(&soduku);
 
     LockedCandidatesPointing lockedCandidatesPointing(&soduku);
+    LockedCandidatesClaiming lockedCandidatesClaiming(&soduku);
 
     clearConsole();
-    
+
     while(true) {
         peerPruner.prune();  
         soduku.print(std::cout);
@@ -88,6 +89,11 @@ int main() {
         }
 
         change = lockedCandidatesPointing.solve();
+        if(change) {
+            continue;
+        }
+
+        change = lockedCandidatesClaiming.solve();
         if(change) {
             continue;
         }
