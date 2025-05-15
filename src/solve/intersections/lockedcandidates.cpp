@@ -60,7 +60,7 @@ bool LockedCandidatesPointing::_solve_box(Box* b) {
             change = true;
         }
         if(change) {
-            std::cout << b->num << " " << cur_candidate_rows.size() << std::endl;
+            // std::cout << b->num << " " << cur_candidate_rows.size() << std::endl;
             SOLUTION_INFO("LockedCandidates Type 1(Pointing): r" + std::to_string(cur_row->num) + "=> " + std::to_string(value));
             return true;
         }

@@ -35,7 +35,7 @@ bool NakedSubsetSolver::solve() {
     return false;
 }
 
-std::pair<std::set<Cell*>, std::set<int>> naked_subset(std::vector<Cell*> cells,
+std::pair<std::set<Cell*>, std::set<int>> NakedSubsetSolver::_naked_subset(std::vector<Cell*> cells,
                                                        int length) {
     using namespace std;
     queue<vector<int>> subset_values_list;
@@ -88,7 +88,7 @@ std::pair<std::set<Cell*>, std::set<int>> naked_subset(std::vector<Cell*> cells,
     return make_pair(set<Cell*>(), set<int>());
 }
 
-bool _work(std::set<Cell*> subset, std::set<int> values) {
+bool NakedSubsetSolver::_work(std::set<Cell*> subset, std::set<int> values) {
     using namespace std;
 
     Row* row = nullptr;
@@ -175,12 +175,12 @@ bool NakedSubsetSolver::_solve_row(Row* row) {
     using namespace std;
     vector<Cell*> cells = row->cells;
     for (int i = 1; i <= 4; i++) {
-        pair<set<Cell*>, set<int>> result = naked_subset(cells, i);
+        pair<set<Cell*>, set<int>> result = this->_naked_subset(cells, i);
         set<Cell*> subset = result.first;
         if (subset.size() == 0)
             continue;
         set<int> values = result.second;
-        bool change = _work(subset, values);
+        bool change = this->_work(subset, values);
 
         if (change) {
             string s = "NakedSubset: ";
@@ -204,12 +204,12 @@ bool NakedSubsetSolver::_solve_column(Column* column) {
     using namespace std;
     vector<Cell*> cells = column->cells;
     for (int i = 1; i <= 4; i++) {
-        pair<set<Cell*>, set<int>> result = naked_subset(cells, i);
+        pair<set<Cell*>, set<int>> result = this->_naked_subset(cells, i);
         set<Cell*> subset = result.first;
         if (subset.size() == 0)
             continue;
         set<int> values = result.second;
-        bool change = _work(subset, values);
+        bool change = this->_work(subset, values);
 
         if (change) {
             string s = "NakedSubset: ";
@@ -238,12 +238,12 @@ bool NakedSubsetSolver::_solve_box(Box* box) {
         }
     }
     for (int i = 1; i <= 4; i++) {
-        pair<set<Cell*>, set<int>> result = naked_subset(cells, i);
+        pair<set<Cell*>, set<int>> result = this->_naked_subset(cells, i);
         set<Cell*> subset = result.first;
         if (subset.size() == 0)
             continue;
         set<int> values = result.second;
-        bool change = _work(subset, values);
+        bool change = this->_work(subset, values);
 
         if (change) {
             string s = "NakedSubset: ";

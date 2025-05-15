@@ -4,7 +4,8 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
-#include <limits> // std::numeric_limits
+#include <limits>
+#include <fstream>
 
 #include "debug_utils/debug_utils.h"
 #include "soduku.h"
@@ -13,6 +14,7 @@
 #include "solve/singles/hiddensingle.h"
 #include "solve/intersections/lockedcandidates.h"
 #include "solve/subsets/nakedsubset.h"
+#include "solve/subsets/hiddensubset.h"
 
 
 void pressAnyKeyToContinue() {
@@ -36,30 +38,48 @@ std::string getCurrentTimeString() {
     return oss.str();
 }
 
+std::vector<std::vector<int>> loadSoduku(const std::string& file_path) {
+    using namespace std;
+    ifstream inputFile(file_path);
+    vector<vector<int>> result;
+    if (!inputFile.is_open()) {
+        cerr << "无法打开文件" << endl;
+        return result;
+    }
+    
+    string line;
+    while (getline(inputFile, line)) {
+        size_t index = 0;
+        size_t last_index = 0;
+        vector<int> cur_line_nums;
+        while((index = line.find_first_of(',', last_index)) != string::npos){
+            cur_line_nums.push_back(stoi(line.substr(last_index, index-last_index)));
+            last_index = index+1;
+        }
+        cur_line_nums.push_back(stoi(line.substr(last_index)));
+        result.push_back(cur_line_nums);
+    }
+    
+    inputFile.close();
+    return result;
+}
+
 
 int main() {
     using namespace std;
     LOG_INFO("Hello world!");
     LOG_INFO("It's now " + getCurrentTimeString());
 
+    string file_path = "assets/test2.txt";
     Soduku soduku;
-    vector<vector<int>> quest = {
-        {-1, 2, 7, -1, 4, -1, 1, -1, -1},
-        {-1, -1, -1, -1, 1, -1, -1, -1, -1},
-        {5, -1, 9, -1, -1, -1, -1, -1, 4},
-
-        {-1, -1, 6, 5, -1, -1, -1, -1, -1},
-        {-1, 9, 1, -1, -1, -1, 2, 6, -1},
-        {-1, -1, -1, -1, -1, 2, 4, -1, -1},
-
-        {7, -1, -1, -1, -1, -1, 3, -1, 8},
-        {-1, -1, -1, -1, 7, -1, -1, -1, -1},
-        {-1, -1, 8, -1, 9, -1, 6, 7, -1}
-    };
+    vector<vector<int>> quest = loadSoduku(file_path);
+    
     soduku.init(quest);
 
-    // LOG_INFO("The initial state of Sudoku...");
-    // soduku.print(std::cout);
+    LOG_INFO("The initial state of Sudoku...");
+    soduku.print(std::cout);
+    pressAnyKeyToContinue();
+    clearConsole();
 
     PeerPruner peerPruner(&soduku);
     NakedSingleSolver nakedSingleSolver(&soduku);
@@ -69,7 +89,7 @@ int main() {
     LockedCandidatesClaiming lockedCandidatesClaiming(&soduku);
     
     NakedSubsetSolver nakedSubsetSolver(&soduku);
-    
+    HiddenSubsetSolver hiddenSubsetSolver(&soduku);
 
     clearConsole();
 
@@ -103,6 +123,11 @@ int main() {
         }
 
         change = nakedSubsetSolver.solve();
+        if(change) {
+            continue;
+        }
+
+        change = hiddenSubsetSolver.solve();
         if(change) {
             continue;
         }
