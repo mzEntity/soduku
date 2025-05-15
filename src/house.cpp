@@ -22,6 +22,18 @@ Row::Row(int row_num, std::vector<Cell*> cells) {
     }
 }
 
+std::vector<Cell*> Row::candidates_contain_value(int value) {
+    std::vector<Cell*> result;
+    for (const auto& cell : this->cells) {
+        if (cell->filled)
+            continue;
+        if (cell->have_candidate(value)) {
+            result.push_back(cell);
+        }
+    }
+    return result;
+}
+
 void Row::remove_candidate_from(Cell* c) {
     ASSERT(c->filled, "cell hasn't been filled.");
     int value = c->value;
@@ -46,6 +58,18 @@ Column::Column(int col_num, std::vector<Cell*> cells) {
     for (int i = 0; i < this->CELL_COUNT; i++) {
         this->cells[i]->col_belong = this;
     }
+}
+
+std::vector<Cell*> Column::candidates_contain_value(int value) {
+    std::vector<Cell*> result;
+    for (const auto& cell : this->cells) {
+        if (cell->filled)
+            continue;
+        if (cell->have_candidate(value)) {
+            result.push_back(cell);
+        }
+    }
+    return result;
 }
 
 void Column::remove_candidate_from(Cell* c) {
@@ -80,6 +104,20 @@ Box::Box(int box_num, std::vector<std::vector<Cell*>> cells) {
             this->cells[i][j]->box_belong = this;
         }
     }
+}
+
+std::vector<Cell*> Box::candidates_contain_value(int value) {
+    std::vector<Cell*> result;
+    for (const auto& cell_row : this->cells) {
+        for (const auto& cell : cell_row) {
+            if (cell->filled)
+                continue;
+            if (cell->have_candidate(value)) {
+                result.push_back(cell);
+            }
+        }
+    }
+    return result;
 }
 
 void Box::remove_candidate_from(Cell* c) {

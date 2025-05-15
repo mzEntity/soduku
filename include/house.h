@@ -17,6 +17,8 @@ class Row : public House {
     std::vector<Cell*> cells;
     Row(int row_num, std::vector<Cell*> cells);
 
+    std::vector<Cell*> candidates_contain_value(int value);
+
     void remove_candidate_from(Cell* c) override;
 };
 
@@ -27,6 +29,8 @@ class Column : public House {
     int num;
     std::vector<Cell*> cells;
     Column(int col_num, std::vector<Cell*> cells);
+
+    std::vector<Cell*> candidates_contain_value(int value);
 
     void remove_candidate_from(Cell* c) override;
 };
@@ -39,6 +43,8 @@ class Box : public House {
     int num;
     std::vector<std::vector<Cell*>> cells;
     Box(int num, std::vector<std::vector<Cell*>> cells);
+
+    std::vector<Cell*> candidates_contain_value(int value);
 
     void remove_candidate_from(Cell* c) override;
 };

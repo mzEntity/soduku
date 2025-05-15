@@ -12,6 +12,7 @@
 #include "solve/singles/nakedsingle.h"
 #include "solve/singles/hiddensingle.h"
 #include "solve/intersections/lockedcandidates.h"
+#include "solve/subsets/nakedsubset.h"
 
 
 void pressAnyKeyToContinue() {
@@ -66,6 +67,9 @@ int main() {
 
     LockedCandidatesPointing lockedCandidatesPointing(&soduku);
     LockedCandidatesClaiming lockedCandidatesClaiming(&soduku);
+    
+    NakedSubsetSolver nakedSubsetSolver(&soduku);
+    
 
     clearConsole();
 
@@ -94,6 +98,11 @@ int main() {
         }
 
         change = lockedCandidatesClaiming.solve();
+        if(change) {
+            continue;
+        }
+
+        change = nakedSubsetSolver.solve();
         if(change) {
             continue;
         }
