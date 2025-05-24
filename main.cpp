@@ -15,8 +15,10 @@
 #include "solve/intersections/lockedcandidates.h"
 #include "solve/subsets/nakedsubset.h"
 #include "solve/subsets/hiddensubset.h"
+
 #include "solve/link.h"
 
+#include "solve/single_digit_patterns/turbot_fish.h"
 
 void pressAnyKeyToContinue() {
     std::cout << "按任意键继续..." << std::endl;
@@ -94,6 +96,8 @@ int main() {
 
     LinkManager linkManager(&soduku);
 
+    TurbotFishSolver turbotFishSolver(&soduku, &linkManager);
+
     clearConsole();
 
     // 如果有候选被消除，则从头开始计算
@@ -136,14 +140,20 @@ int main() {
             continue;
         }
 
+        linkManager.build();
+        change = turbotFishSolver.solve();
+        if(change) {
+            continue;
+        }
+
         break;
     }
 
     LOG_INFO("The final result...(really?)");
     soduku.print(std::cout);
 
-    linkManager.build();
-    linkManager.print_all_links();
+    
+    // linkManager.print_all_links();
 
     return 0;
 }

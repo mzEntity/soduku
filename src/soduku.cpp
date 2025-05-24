@@ -74,6 +74,11 @@ std::string Cell::get_position() {
     return "r" + std::to_string(this->row_belong->num) + "c" + std::to_string(this->col_belong->num);
 }
 
+bool Cell::is_peer(Cell* other){
+    ASSERT(this != other, "one cell cannot be a peer");
+    return this->row_belong == other->row_belong || this->col_belong == other->col_belong || this->box_belong == other->box_belong;
+}
+
 void Cell::_remove_all_candidates() {
     for (int i = 0; i < this->POSSIBLE_COUNT; i++) {
         this->candidates[i] = false;
@@ -180,6 +185,24 @@ Cell* Soduku::get_cell(int row_num, int col_num){
            "Col number should be between 1 and 9.");
 
     return this->cells[row_num - 1][col_num - 1];
+}
+
+std::vector<Cell*> Soduku::get_cells_meet_all(std::vector<Cell*> cells){
+    std::vector<Cell*> result;
+    for(int i = 0; i < 9; i++) {
+        for(int j = 0; j < 9; j++) {
+            Cell* cur_cell = this->cells[i][j];
+            bool fail = false;
+            for(const auto& cell: cells) {
+                if(cur_cell == cell || !cur_cell->is_peer(cell)) {
+                    fail = true;
+                    break;
+                };
+            }
+            if(!fail) result.push_back(cur_cell);
+        }
+    }
+    return result;
 }
 
 void Soduku::print(std::ostream& out) {

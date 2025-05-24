@@ -11,6 +11,43 @@ LinkNode::LinkNode(Cell* cell, int candidate) {
     this->candidate = candidate;
 }
 
+std::vector<LinkNode*> LinkNode::get_node_strong_linked_between() {
+    using namespace std;
+    vector<LinkNode*> result;
+    for(Link* link: this->strong_link_between_list) {
+        LinkNode* other_node = link->node1;
+        if(other_node == this) {
+            other_node = link->node2;
+        }
+        ASSERT(other_node != this, "strong link between with self");
+        result.push_back(other_node);
+    }
+    return result;
+}
+
+std::vector<LinkNode*> LinkNode::get_node_linked_between() {
+    using namespace std;
+    vector<LinkNode*> result;
+    for(Link* link: this->strong_link_between_list) {
+        LinkNode* other_node = link->node1;
+        if(other_node == this) {
+            other_node = link->node2;
+        }
+        ASSERT(other_node != this, "strong link between with self");
+        result.push_back(other_node);
+    }
+
+    for(Link* link: this->weak_link_between_list) {
+        LinkNode* other_node = link->node1;
+        if(other_node == this) {
+            other_node = link->node2;
+        }
+        ASSERT(other_node != this, "weak link between with self");
+        result.push_back(other_node);
+    }
+    return result;
+}
+
 Link::Link(LinkNode* node1, LinkNode* node2, link_type type) {
     this->node1 = node1;
     this->node2 = node2;
@@ -76,8 +113,10 @@ void LinkManager::_clear_all_build() {
                 node->weak_link_between_list.clear();
                 delete node;
             }
+            this->all_nodes[i][j].clear();
         }
     }
+    
 
     for (auto& pair : this->strong_link_between_list) {
         for (Link* link : pair.second) {
@@ -119,6 +158,14 @@ void LinkManager::print_all_links() {
             cout << "\t\t" << link->to_string() << endl;
         }
     }
+}
+
+std::vector<LinkNode*> LinkManager::get_nodes(int row_num, int col_num){
+    ASSERT(row_num >= 1 && row_num <= 9,
+           "Row number should be between 1 and 9.");
+    ASSERT(col_num >= 1 && col_num <= 9,
+           "Col number should be between 1 and 9.");
+    return this->all_nodes[row_num - 1][col_num - 1];
 }
 
 void LinkManager::_build_row(Row* row) {

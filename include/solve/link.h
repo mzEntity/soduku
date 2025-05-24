@@ -1,8 +1,7 @@
 #pragma once
 
-
-#include <vector>
 #include <map>
+#include <vector>
 
 #define LINK_STRONG 1
 #define LINK_WEAK 2
@@ -28,6 +27,17 @@ class LinkNode {
     std::vector<Link*> weak_link_between_list;
 
     LinkNode(Cell* cell, int candidate);
+
+    std::vector<Link*> get_strong_link_between_list() {
+        return this->strong_link_between_list;
+    }
+
+    std::vector<Link*> get_weak_link_between_list() {
+        return this->weak_link_between_list;
+    }
+
+    std::vector<LinkNode*> get_node_strong_linked_between();
+    std::vector<LinkNode*> get_node_linked_between();
 };
 
 class Link {
@@ -57,9 +67,9 @@ class LinkManager {
     void build();
     void print_all_links();
 
-    ~LinkManager() {
-        this->_clear_all_build();
-    }
+    std::vector<LinkNode*> get_nodes(int row_num, int col_num);
+
+    ~LinkManager() { this->_clear_all_build(); }
 
    private:
     void _build_row(Row* row);

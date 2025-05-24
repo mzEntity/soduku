@@ -30,6 +30,8 @@ class Cell {
 
     std::string get_position();
 
+    bool is_peer(Cell* other);
+
    private:
     void _remove_all_candidates();
     void _remove_all_candidates_except(int value);
@@ -53,6 +55,8 @@ class Soduku {
     void fill(int row_num, int col_num, int value);
     void remove_candidate(int row_num, int col_num, int value);
     Cell* get_cell(int row_num, int col_num);
+
+    std::vector<Cell*> get_cells_meet_all(std::vector<Cell*> cells);
     
     void print(std::ostream& out);
 };
