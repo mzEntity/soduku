@@ -15,6 +15,7 @@
 #include "solve/intersections/lockedcandidates.h"
 #include "solve/subsets/nakedsubset.h"
 #include "solve/subsets/hiddensubset.h"
+#include "solve/link.h"
 
 
 void pressAnyKeyToContinue() {
@@ -70,7 +71,7 @@ int main() {
     LOG_INFO("Hello world!");
     LOG_INFO("It's now " + getCurrentTimeString());
 
-    string file_path = "assets/test2.txt";
+    string file_path = "assets/test3.txt";
     Soduku soduku;
     vector<vector<int>> quest = loadSoduku(file_path);
     
@@ -91,8 +92,11 @@ int main() {
     NakedSubsetSolver nakedSubsetSolver(&soduku);
     HiddenSubsetSolver hiddenSubsetSolver(&soduku);
 
+    LinkManager linkManager(&soduku);
+
     clearConsole();
 
+    // 如果有候选被消除，则从头开始计算
     while(true) {
         peerPruner.prune();  
         soduku.print(std::cout);
@@ -137,6 +141,10 @@ int main() {
 
     LOG_INFO("The final result...(really?)");
     soduku.print(std::cout);
+
+    linkManager.build();
+    linkManager.print_all_links();
+
     return 0;
 }
 
