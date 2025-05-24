@@ -24,8 +24,8 @@ LinkManager::LinkManager(Soduku* target) {
     this->target = target;
     for(int i = 0; i < 9; i++) {
         int value = i + 1;
-        this->strong_link_list.insert({value, std::vector<Link*>()});
-        this->weak_link_list.insert({value, std::vector<Link*>()});
+        this->strong_link_between_list.insert({value, std::vector<Link*>()});
+        this->weak_link_between_list.insert({value, std::vector<Link*>()});
     }
 }
 
@@ -50,7 +50,7 @@ void LinkManager::print_all_links(){
     cout << "strong links: " << endl;
     for(int i = 0; i < 9; i++) {
         int value = i + 1;
-        vector<Link*> strong_links = this->strong_link_list[value];
+        vector<Link*> strong_links = this->strong_link_between_list[value];
         if(strong_links.size() == 0) continue;
         cout << "\tvalue " << value << ": " << endl;
         for(const auto& link: strong_links) {
@@ -61,7 +61,7 @@ void LinkManager::print_all_links(){
     cout << "weak links: " << endl;
     for(int i = 0; i < 9; i++) {
         int value = i + 1;
-        vector<Link*> weak_links = this->weak_link_list[value];
+        vector<Link*> weak_links = this->weak_link_between_list[value];
         if(weak_links.size() == 0) continue;
         cout << "\tvalue " << value << ": " << endl;
         for(const auto& link: weak_links) {
@@ -95,10 +95,10 @@ void LinkManager::_build_row(Row* row){
                 Link* link = nullptr;
                 if(cell_count > 2) {
                     link = this->_build_weak_link(cur_cells_with_value[j], cur_cells_with_value[k], value);
-                    this->weak_link_list[value].push_back(link);
+                    this->weak_link_between_list[value].push_back(link);
                 } else {
                     link = this->_build_strong_link(cur_cells_with_value[j], cur_cells_with_value[k], value);
-                    this->strong_link_list[value].push_back(link);
+                    this->strong_link_between_list[value].push_back(link);
                 }
             }
         }
@@ -130,10 +130,10 @@ void LinkManager::_build_column(Column* column){
                 Link* link = nullptr;
                 if(cell_count > 2) {
                     link = this->_build_weak_link(cur_cells_with_value[j], cur_cells_with_value[k], value);
-                    this->weak_link_list[value].push_back(link);
+                    this->weak_link_between_list[value].push_back(link);
                 } else {
                     link = this->_build_strong_link(cur_cells_with_value[j], cur_cells_with_value[k], value);
-                    this->strong_link_list[value].push_back(link);
+                    this->strong_link_between_list[value].push_back(link);
                 }
             }
         }
@@ -175,10 +175,10 @@ void LinkManager::_build_box(Box* box){
                 Link* link = nullptr;
                 if(cell_count > 2) {
                     link = this->_build_weak_link(cell1, cell2, value);
-                    this->weak_link_list[value].push_back(link);
+                    this->weak_link_between_list[value].push_back(link);
                 } else {
                     link = this->_build_strong_link(cell1, cell2, value);
-                    this->strong_link_list[value].push_back(link);
+                    this->strong_link_between_list[value].push_back(link);
                 }
             }
         }

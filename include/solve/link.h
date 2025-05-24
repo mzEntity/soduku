@@ -40,8 +40,8 @@ class LinkManager {
    private:
     Soduku* target;
 
-    std::map<int, std::vector<Link*>> strong_link_list;
-    std::map<int, std::vector<Link*>> weak_link_list;
+    std::map<int, std::vector<Link*>> strong_link_between_list;
+    std::map<int, std::vector<Link*>> weak_link_between_list;
 
    public:
     LinkManager(Soduku* target);
