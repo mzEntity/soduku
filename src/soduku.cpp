@@ -155,7 +155,7 @@ void Soduku::init(std::vector<std::vector<int>> quest) {
 
     for (int i = 0; i < row_count; i++) {
         for (int j = 0; j < col_count; j++) {
-            if (quest[i][j] == -1)
+            if (quest[i][j] == 0)
                 continue;
             this->cells[i][j]->fix(quest[i][j]);
         }
