@@ -2,9 +2,9 @@
 #include "debug_utils/debug_utils.h"
 #include "solve/solutionlog.h"
 
-#include "soduku.h"
+#include "sudoku.h"
 
-HiddenSingleSolver::HiddenSingleSolver(Soduku* target) {
+HiddenSingleSolver::HiddenSingleSolver(Sudoku* target) {
     this->target = target;
 }
 

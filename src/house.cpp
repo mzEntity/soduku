@@ -1,6 +1,6 @@
 #include "house.h"
 #include "debug_utils/debug_utils.h"
-#include "soduku.h"
+#include "sudoku.h"
 
 const int Row::CELL_COUNT = 9;
 const int Column::CELL_COUNT = 9;

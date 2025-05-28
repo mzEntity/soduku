@@ -1,8 +1,8 @@
 #include "solve/peerpruner.h"
-#include "soduku.h"
+#include "sudoku.h"
 #include "debug_utils/debug_utils.h"
 
-PeerPruner::PeerPruner(Soduku* target){
+PeerPruner::PeerPruner(Sudoku* target){
     this->target = target;
 }
 

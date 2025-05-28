@@ -4,7 +4,7 @@
 #include <map>
 #include <vector>
 #include "house.h"
-#include "soduku.h"
+#include "sudoku.h"
 
 LinkNode::LinkNode(Cell* cell, int candidate) {
     this->cell = cell;
@@ -60,7 +60,7 @@ std::string Link::to_string() {
            "--" + this->node2->cell->get_position();
 }
 
-LinkManager::LinkManager(Soduku* target) {
+LinkManager::LinkManager(Sudoku* target) {
     this->target = target;
     for (int i = 0; i < 9; i++) {
         int value = i + 1;

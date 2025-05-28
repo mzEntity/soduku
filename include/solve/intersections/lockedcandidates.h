@@ -1,16 +1,16 @@
 #pragma once
 
-class Soduku;
+class Sudoku;
 class Cell;
 class Box;
 class Row;
 class Column;
 
 class LockedCandidatesPointing {
-    Soduku* target;
+    Sudoku* target;
 
    public:
-    LockedCandidatesPointing(Soduku* target);
+    LockedCandidatesPointing(Sudoku* target);
     bool solve();
 
     private:
@@ -19,10 +19,10 @@ class LockedCandidatesPointing {
 
 
 class LockedCandidatesClaiming {
-    Soduku* target;
+    Sudoku* target;
 
    public:
-    LockedCandidatesClaiming(Soduku* target);
+    LockedCandidatesClaiming(Sudoku* target);
     bool solve();
 
     private:

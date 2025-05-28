@@ -8,7 +8,7 @@
 
 typedef int link_type;
 
-class Soduku;
+class Sudoku;
 class Cell;
 
 class Row;
@@ -55,7 +55,7 @@ class Link {
 
 class LinkManager {
    private:
-    Soduku* target;
+    Sudoku* target;
 
     std::vector<std::vector<std::vector<LinkNode*>>> all_nodes;
 
@@ -63,7 +63,7 @@ class LinkManager {
     std::map<int, std::vector<Link*>> weak_link_between_list;
 
    public:
-    LinkManager(Soduku* target);
+    LinkManager(Sudoku* target);
     void build();
     void print_all_links();
 

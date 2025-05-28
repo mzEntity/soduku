@@ -39,7 +39,7 @@ class Cell {
 
 
 
-class Soduku {
+class Sudoku {
     static const int ROW_COUNT;
     static const int COL_COUNT;
 
@@ -49,7 +49,7 @@ class Soduku {
     std::vector<Column*> columns;
     std::vector<std::vector<Box*>> boxes;
 
-    Soduku();
+    Sudoku();
 
     void init(std::vector<std::vector<int>> quest);
     void fill(int row_num, int col_num, int value);

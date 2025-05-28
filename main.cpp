@@ -8,7 +8,7 @@
 #include <fstream>
 
 #include "debug_utils/debug_utils.h"
-#include "soduku.h"
+#include "sudoku.h"
 #include "solve/peerpruner.h"
 #include "solve/singles/nakedsingle.h"
 #include "solve/singles/hiddensingle.h"
@@ -41,7 +41,7 @@ std::string getCurrentTimeString() {
     return oss.str();
 }
 
-std::vector<std::vector<int>> loadSoduku(const std::string& file_path) {
+std::vector<std::vector<int>> loadSudoku(const std::string& file_path) {
     using namespace std;
     ifstream inputFile(file_path);
     vector<vector<int>> result;
@@ -74,36 +74,36 @@ int main() {
     LOG_INFO("It's now " + getCurrentTimeString());
 
     string file_path = "assets/test3.txt";
-    Soduku soduku;
-    vector<vector<int>> quest = loadSoduku(file_path);
+    Sudoku sudoku;
+    vector<vector<int>> quest = loadSudoku(file_path);
     
-    soduku.init(quest);
+    sudoku.init(quest);
 
     LOG_INFO("The initial state of Sudoku...");
-    soduku.print(std::cout);
+    sudoku.print(std::cout);
     pressAnyKeyToContinue();
     clearConsole();
 
-    PeerPruner peerPruner(&soduku);
-    NakedSingleSolver nakedSingleSolver(&soduku);
-    HiddenSingleSolver hiddenSingleSolver(&soduku);
+    PeerPruner peerPruner(&sudoku);
+    NakedSingleSolver nakedSingleSolver(&sudoku);
+    HiddenSingleSolver hiddenSingleSolver(&sudoku);
 
-    LockedCandidatesPointing lockedCandidatesPointing(&soduku);
-    LockedCandidatesClaiming lockedCandidatesClaiming(&soduku);
+    LockedCandidatesPointing lockedCandidatesPointing(&sudoku);
+    LockedCandidatesClaiming lockedCandidatesClaiming(&sudoku);
     
-    NakedSubsetSolver nakedSubsetSolver(&soduku);
-    HiddenSubsetSolver hiddenSubsetSolver(&soduku);
+    NakedSubsetSolver nakedSubsetSolver(&sudoku);
+    HiddenSubsetSolver hiddenSubsetSolver(&sudoku);
 
-    LinkManager linkManager(&soduku);
+    LinkManager linkManager(&sudoku);
 
-    TurbotFishSolver turbotFishSolver(&soduku, &linkManager);
+    TurbotFishSolver turbotFishSolver(&sudoku, &linkManager);
 
     clearConsole();
 
     // 如果有候选被消除，则从头开始计算
     while(true) {
         peerPruner.prune();  
-        soduku.print(std::cout);
+        sudoku.print(std::cout);
         pressAnyKeyToContinue();
         clearConsole();
 
@@ -150,7 +150,7 @@ int main() {
     }
 
     LOG_INFO("The final result...(really?)");
-    soduku.print(std::cout);
+    sudoku.print(std::cout);
 
     
     // linkManager.print_all_links();

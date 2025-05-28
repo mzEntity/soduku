@@ -1,4 +1,4 @@
-#include "soduku.h"
+#include "sudoku.h"
 #include "debug_utils/debug_utils.h"
 #include "house.h"
 
@@ -94,11 +94,11 @@ void Cell::_remove_all_candidates_except(int value) {
     }
 }
 
-const int Soduku::ROW_COUNT = 9;
-const int Soduku::COL_COUNT = 9;
+const int Sudoku::ROW_COUNT = 9;
+const int Sudoku::COL_COUNT = 9;
 
-Soduku::Soduku() {
-    LOG_INFO("soduku initializing...");
+Sudoku::Sudoku() {
+    LOG_INFO("sudoku initializing...");
     for(int i = 0; i < this->ROW_COUNT; i++) {
         std::vector<Cell*> cell_row = std::vector<Cell*>();
         for(int j = 0; j < this->COL_COUNT; j++) {
@@ -143,15 +143,15 @@ Soduku::Soduku() {
         this->boxes.push_back(box_row);
     }
 
-    LOG_INFO("soduku initialization finished.");
+    LOG_INFO("sudoku initialization finished.");
 }
 
-void Soduku::init(std::vector<std::vector<int>> quest) {
+void Sudoku::init(std::vector<std::vector<int>> quest) {
     int row_count = quest.size();
-    ASSERT(row_count == this->ROW_COUNT, "shape of the soduku doesn't match.");
+    ASSERT(row_count == this->ROW_COUNT, "shape of the sudoku doesn't match.");
 
     int col_count = quest[0].size();
-    ASSERT(col_count == this->COL_COUNT, "shape of the soduku doesn't match.");
+    ASSERT(col_count == this->COL_COUNT, "shape of the sudoku doesn't match.");
 
     for (int i = 0; i < row_count; i++) {
         for (int j = 0; j < col_count; j++) {
@@ -162,7 +162,7 @@ void Soduku::init(std::vector<std::vector<int>> quest) {
     }
 }
 
-void Soduku::fill(int row_num, int col_num, int value) {
+void Sudoku::fill(int row_num, int col_num, int value) {
     ASSERT(row_num >= 1 && row_num <= this->ROW_COUNT,
            "Row number should be between 1 and 9.");
     ASSERT(col_num >= 1 && col_num <= this->COL_COUNT,
@@ -170,7 +170,7 @@ void Soduku::fill(int row_num, int col_num, int value) {
     this->cells[row_num - 1][col_num - 1]->fill(value);
 }
 
-void Soduku::remove_candidate(int row_num, int col_num, int value) {
+void Sudoku::remove_candidate(int row_num, int col_num, int value) {
     ASSERT(row_num >= 1 && row_num <= this->ROW_COUNT,
            "Row number should be between 1 and 9.");
     ASSERT(col_num >= 1 && col_num <= this->COL_COUNT,
@@ -178,7 +178,7 @@ void Soduku::remove_candidate(int row_num, int col_num, int value) {
     this->cells[row_num - 1][col_num - 1]->remove_candidate(value);
 }
 
-Cell* Soduku::get_cell(int row_num, int col_num){
+Cell* Sudoku::get_cell(int row_num, int col_num){
     ASSERT(row_num >= 1 && row_num <= this->ROW_COUNT,
            "Row number should be between 1 and 9.");
     ASSERT(col_num >= 1 && col_num <= this->COL_COUNT,
@@ -187,7 +187,7 @@ Cell* Soduku::get_cell(int row_num, int col_num){
     return this->cells[row_num - 1][col_num - 1];
 }
 
-std::vector<Cell*> Soduku::get_cells_meet_all(std::vector<Cell*> cells){
+std::vector<Cell*> Sudoku::get_cells_meet_all(std::vector<Cell*> cells){
     std::vector<Cell*> result;
     for(int i = 0; i < 9; i++) {
         for(int j = 0; j < 9; j++) {
@@ -205,7 +205,7 @@ std::vector<Cell*> Soduku::get_cells_meet_all(std::vector<Cell*> cells){
     return result;
 }
 
-void Soduku::print(std::ostream& out) {
+void Sudoku::print(std::ostream& out) {
     for (int i = 0; i < this->ROW_COUNT; i++) {
         if (i % 3 == 0) {
             for (int j = 0; j < this->COL_COUNT; j++) {

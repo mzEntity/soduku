@@ -1,9 +1,9 @@
 #include "solve/intersections/lockedcandidates.h"
 #include "house.h"
-#include "soduku.h"
+#include "sudoku.h"
 #include "solve/solutionlog.h"
 
-LockedCandidatesPointing::LockedCandidatesPointing(Soduku* target) {
+LockedCandidatesPointing::LockedCandidatesPointing(Sudoku* target) {
     this->target = target;
 }
 
@@ -97,7 +97,7 @@ bool LockedCandidatesPointing::_solve_box(Box* b) {
 }
 
 
-LockedCandidatesClaiming::LockedCandidatesClaiming(Soduku* target) {
+LockedCandidatesClaiming::LockedCandidatesClaiming(Sudoku* target) {
     this->target = target;
 }
 

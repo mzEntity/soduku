@@ -1,16 +1,16 @@
 #pragma once
 
-class Soduku;
+class Sudoku;
 class Cell;
 class LinkManager;
 class LinkNode;
 
 class TurbotFishSolver {
-    Soduku* target;
+    Sudoku* target;
     LinkManager* linkManager;
 
    public:
-    TurbotFishSolver(Soduku* target, LinkManager* linkManager);
+    TurbotFishSolver(Sudoku* target, LinkManager* linkManager);
     bool solve();
 
 

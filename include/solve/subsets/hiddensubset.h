@@ -5,17 +5,17 @@
 #include <utility>
 #include <vector>
 
-class Soduku;
+class Sudoku;
 class Cell;
 class Row;
 class Column;
 class Box;
 
 class HiddenSubsetSolver {
-    Soduku* target;
+    Sudoku* target;
 
    public:
-    HiddenSubsetSolver(Soduku* target);
+    HiddenSubsetSolver(Sudoku* target);
     bool solve();
 
    private:

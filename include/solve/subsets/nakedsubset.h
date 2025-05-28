@@ -4,17 +4,17 @@
 #include <utility>
 #include <vector>
 
-class Soduku;
+class Sudoku;
 class Cell;
 class Row;
 class Column;
 class Box;
 
 class NakedSubsetSolver {
-    Soduku* target;
+    Sudoku* target;
 
    public:
-    NakedSubsetSolver(Soduku* target);
+    NakedSubsetSolver(Sudoku* target);
     bool solve();
 
    private:

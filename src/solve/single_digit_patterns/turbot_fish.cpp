@@ -1,13 +1,13 @@
 #include "debug_utils/debug_utils.h"
 
-#include "soduku.h"
+#include "sudoku.h"
 #include "solve/solutionlog.h"
 #include "solve/link.h"
 #include "solve/single_digit_patterns/turbot_fish.h"
 
 #include <vector>
 
-TurbotFishSolver::TurbotFishSolver(Soduku* target, LinkManager* linkManager) {
+TurbotFishSolver::TurbotFishSolver(Sudoku* target, LinkManager* linkManager) {
     this->target = target;
     this->linkManager = linkManager;
 }

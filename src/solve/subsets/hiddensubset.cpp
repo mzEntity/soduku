@@ -1,5 +1,5 @@
 #include "solve/subsets/hiddensubset.h"
-#include "soduku.h"
+#include "sudoku.h"
 #include "solve/solutionlog.h"
 
 #include <queue>
@@ -7,7 +7,7 @@
 #include <utility>
 #include <vector>
 
-HiddenSubsetSolver::HiddenSubsetSolver(Soduku* target) {
+HiddenSubsetSolver::HiddenSubsetSolver(Sudoku* target) {
     this->target = target;
 }
 

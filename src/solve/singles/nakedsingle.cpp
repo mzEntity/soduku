@@ -1,9 +1,9 @@
 #include "solve/singles/nakedsingle.h"
-#include "soduku.h"
+#include "sudoku.h"
 #include "debug_utils/debug_utils.h"
 #include "solve/solutionlog.h"
 
-NakedSingleSolver::NakedSingleSolver(Soduku* target){
+NakedSingleSolver::NakedSingleSolver(Sudoku* target){
     this->target = target;
 }
 

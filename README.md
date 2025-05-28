@@ -1,1 +1,1 @@
-# soduku
+# sudoku

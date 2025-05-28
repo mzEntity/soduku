@@ -1,13 +1,13 @@
 #pragma once
 
-class Soduku;
+class Sudoku;
 class Cell;
 
 class HiddenSingleSolver {
-    Soduku* target;
+    Sudoku* target;
 
    public:
-    HiddenSingleSolver(Soduku* target);
+    HiddenSingleSolver(Sudoku* target);
     Cell* solve();
 
     private:

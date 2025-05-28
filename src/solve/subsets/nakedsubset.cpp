@@ -1,6 +1,6 @@
 #include "solve/subsets/nakedsubset.h"
 #include "house.h"
-#include "soduku.h"
+#include "sudoku.h"
 #include "solve/solutionlog.h"
 
 #include <queue>
@@ -8,7 +8,7 @@
 #include <utility>
 #include <vector>
 
-NakedSubsetSolver::NakedSubsetSolver(Soduku* target) {
+NakedSubsetSolver::NakedSubsetSolver(Sudoku* target) {
     this->target = target;
 }
 

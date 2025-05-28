@@ -1,12 +1,12 @@
 #pragma once
 
-class Soduku;
+class Sudoku;
 
 class PeerPruner {
-    Soduku* target;
+    Sudoku* target;
 
    public:
-    PeerPruner(Soduku* target);
+    PeerPruner(Sudoku* target);
     void prune(int row_num, int col_num);
     void prune();
 };
